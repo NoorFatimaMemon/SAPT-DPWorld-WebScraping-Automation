@@ -1,0 +1,5 @@
+Setup Process: Use the provided setup.bat file to automatically install Python and all necessary dependencies for the project.
+
+Launching the SAPT Website: Run the SAPT website by executing the main_sapt.bat file. This will start the SAPT scraping.
+
+Launching the DP World Website: Run the DP World website by executing the main_dp_world.bat file. This will start the DP World scraping.
