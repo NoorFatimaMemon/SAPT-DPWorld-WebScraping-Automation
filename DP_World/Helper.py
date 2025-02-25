@@ -7,21 +7,35 @@ import time
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Helper():
-    def scraper(self, main_URL, Tracking_ID, headless):
-        logging.info("--------------- Starting browser instance ---------------")
+    def start_browser(self, main_URL, headless):
+        logging.info("--------------- Starting new browser session ---------------")
         driver = Driver(uc=True, undetectable=True, headless=headless)
 
         logging.info(f"Accessing -------------> {main_URL}")
         driver.get(main_URL)
         driver.implicitly_wait(50)
-        time.sleep(2)
-        
-        # To Click on Container Inquiry
-        logging.info("--------------- Clicking on Container Inquiry button ---------------")
-        Container_Inquiry_button = driver.find_element(By.XPATH, "//h3[contains(normalize-space(.), 'Container') and contains(normalize-space(.), 'Inquiry')]//parent::div//button[normalize-space(text()) = 'Click Here']")
-        Container_Inquiry_button.click()
-        time.sleep(2)
 
+        try:
+            # Scroll to "General Public Options"
+            logging.info("Scrolling to 'General Public Options'.")
+            general_public_options = driver.find_element(By.XPATH, '//h2[text()="General Public Options"]')
+            driver.execute_script("arguments[0].scrollIntoView();", general_public_options)
+            time.sleep(0.5)
+
+            # Click on "Container Inquiry"
+            logging.info("Clicking 'Container Inquiry' button.")
+            container_inquiry_button = driver.find_element(By.XPATH, 
+                "//h3[contains(normalize-space(.), 'Container') and contains(normalize-space(.), 'Inquiry')]"
+                "//parent::div//button[normalize-space(text()) = 'Click Here']")
+            container_inquiry_button.click()
+            time.sleep(2)
+
+        except Exception as e:
+            logging.error(f"Error interacting with the page: {e}")
+
+        return driver
+
+    def scraper(self, Tracking_ID, driver):        
         # To Enter Tracking ID or Container No.
         logging.info("--------------- Entering Tracking ID or Container No. ---------------")
         Tracking_ID_input = driver.find_element(By.XPATH, '//label[@for="txtcontainerNumber"]//parent::div//input[@placeholder="Enter container #"]')
@@ -177,8 +191,12 @@ class Helper():
 
         print(f"Truck In Yard: {Truck_In_Yard}")
         time.sleep(1)
-        driver.close()
-        driver.quit()
+        
+        # To Click on Close Button
+        logging.info("--------------- Clicking on Close Button ---------------")
+        Search_button = driver.find_element(By.XPATH, '(//div[@class="modal-header"]//button[@aria-label="Close"])[3]')
+        Search_button.click()
+        time.sleep(2)
 
         data = {'Tracking_ID':Tracking_ID,'Shipping_Line':Shipping_Line,'Size/Type':Size_Type,'Category':Category,
                 'Status':Status,'Port_of_Discharge':Discharge_Port,'Destination':Destination,'Position':Position,

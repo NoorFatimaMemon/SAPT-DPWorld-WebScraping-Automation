@@ -31,24 +31,42 @@ class Main():
             return None
 
     def main(self):
-        # to check csv file containing container details exist or have to create one
+        # File paths
         data_stored_file = 'Sapt\Sapt_Data.csv'
-        logging.info(f"--------------- Checking csv file {data_stored_file} exist or have to create one ---------------")
-        Scraped_Tracking_IDs = self.csv_creator(data_stored_file)  
-
-        # to get saved Tracking IDs to give them as input from Tracking_IDs csv file 
-        logging.info("--------------- Getting Tracking IDs from Tracking_IDs csv file  ---------------")
-        New_Tracking_IDs = pd.read_csv('Sapt\Tracking_IDs.csv')['Tracking_IDs'].tolist()
+        tracking_ids_file = 'Sapt\Tracking_IDs.csv'
         main_URL = "https://sapt.com.pk/"
+        headless = True
 
-        for Tracking_ID in New_Tracking_IDs:
-            if Scraped_Tracking_IDs is None or Tracking_ID not in Scraped_Tracking_IDs:
-                logging.info(f"--------------- Beginning scraping Tracking ID/Container No. {Tracking_ID} details ---------------")
-                data = self.Helper.scraper(main_URL=main_URL, Tracking_ID=Tracking_ID, headless=True)
-                df = pd.DataFrame([data])
-                logging.info(f"--------------- Storing scraping Tracking ID/Container No. {Tracking_ID} details ---------------")
-                df.to_csv(data_stored_file, mode='a', index=False, header=False) 
-                print(f"This Tracking ID '{Tracking_ID}' is scraped")
+        # Logging setup
+        logging.info(f"Checking if CSV file {data_stored_file} exists or needs to be created.")
+        # Load already scraped Tracking IDs
+        Scraped_Tracking_IDs = self.csv_creator(data_stored_file)
+
+        # Load new Tracking IDs from CSV
+        logging.info("Loading Tracking IDs from Tracking_IDs.csv")
+        New_Tracking_IDs = pd.read_csv(tracking_ids_file)['Tracking_IDs'].tolist()
+
+        # Start browser session
+        count = 0
+        driver = self.Helper.start_browser(main_URL, headless)
+
+        for tracking_id in New_Tracking_IDs:
+            if Scraped_Tracking_IDs is None or tracking_id not in Scraped_Tracking_IDs:
+                # Restart browser after every 10 IDs
+                if count > 0 and count % 10 == 0:
+                    driver.quit()
+                    logging.info("Restarting browser session after processing 10 IDs.")
+                    driver = self.Helper.start_browser(main_URL, headless)  # Restart browser
+
+                logging.info(f"Scraping Tracking ID: {tracking_id}")
+                self.Helper.scraper(Tracking_ID=tracking_id, driver=driver, data_stored_file=data_stored_file)
+                count += 1
+
+        # Ensure browser is closed at the end
+        if driver:
+            driver.quit()
+            logging.info("Browser session closed. Scraping completed.")
+
 
 test = Main()
 test.main()
