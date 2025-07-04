@@ -2,8 +2,6 @@ from Helper import Helper
 import pandas as pd
 import os
 import logging
-from seleniumbase import Driver
-import time
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -35,7 +33,7 @@ class Main():
         data_stored_file = 'DP_World\DP_World_Karachi_Data.csv'
         tracking_ids_file = 'DP_World\Tracking_IDs.csv'
         main_URL = "https://lfs.qict.com.pk/"
-        headless = True
+        headless = False
 
         # Logging setup
         logging.info(f"Checking if CSV file {data_stored_file} exists or needs to be created.")

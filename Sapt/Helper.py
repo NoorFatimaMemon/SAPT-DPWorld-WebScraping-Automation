@@ -19,31 +19,26 @@ class Helper():
         try:
             # To Click the Dialog box
             logging.info("Clicking on Dialog Box if present")
-            try:
-                dialog_box = driver.find_element(By.XPATH,'//div[@class="modal-dialog"]//div[@class="modal-content"]')
-            except:
-                dialog_box = driver.find_element(By.XPATH,'//div[@class="modal-dialog"]//div[@class="modal-header"]')
-
-            time.sleep(0.5)
+            dialog_box = driver.find_element(By.XPATH,'//div[@class="wpb-main-wrapper"]//div[@onclick="closeModal()"]')
             if dialog_box:
                 driver.refresh()
-                time.sleep(0.5)
-                close_button = driver.find_element(By.XPATH, '//div[@class="modal-dialog"]//div[@class="modal-content"]//div[@class="wpb_close_btn"]')
+                # time.sleep(0.5)
+                close_button = driver.find_element(By.XPATH, '//div[@class="wpb-main-wrapper"]//div[@onclick="closeModal()"]')
                 close_button.click()  
 
             # Scroll to the "Find your Container" element
             container_element = driver.find_element(By.XPATH, '(//div[@class="dt_row container row"])[2]')
-            time.sleep(0.5)
+            # time.sleep(0.5)
             # Scroll the element into view
             driver.execute_script("arguments[0].scrollIntoView();", container_element)
 
             # Click on "Find your Container" button
             logging.info("Clicking on Find your Container button")
             container_inquiry_button = driver.find_element(By.XPATH, '//h1[@class="day_time"]//span[text()= "Find Your"]')
-            time.sleep(0.5)
+            #time.sleep(0.5)
             driver.execute_script("arguments[0].scrollIntoView(); window.scrollBy(0, -100);", container_inquiry_button)
             container_inquiry_button.click()
-            time.sleep(0.5)
+            #time.sleep(0.5)
             logging.info('"Find your Container" button Clicked')
 
         except Exception as e:
@@ -69,16 +64,16 @@ class Helper():
         y = location['y'] + location['height'] / 2
         # Click using JavaScript at the calculated coordinates
         driver.execute_script("document.elementFromPoint(arguments[0], arguments[1]).click();", x, y)
-        time.sleep(2)
+        #time.sleep(2)
         logging.info("--------------- Search Button Clicked ---------------")
-        time.sleep(1)
+        #time.sleep(1)
 
         # To Click on Tracking ID to get its details
         logging.info("--------------- Clicking on Tracking ID to get details ---------------")
         TrackingIDs_links = driver.find_elements(By.XPATH, '//a[@href="#detailView"]')
         for TrackingIDs_link in TrackingIDs_links:
             TrackingIDs_link.click()
-            time.sleep(2)
+            #time.sleep(2)
             logging.info("--------------- Tracking ID Clicked to get details ---------------")
 
             # To Get Container Details
@@ -175,14 +170,14 @@ class Helper():
             print(f"DO Expiry Date: {DO_Expiry_Date}")
 
             try:
-                GateIn_Time = driver.find_element(By.XPATH, '(//td[normalize-space(.)="GateIn Time"]//parent::tr//td)[2]').text
+                GateIn_Time = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Gate In Time"]//parent::tr//td)[2]').text
             except:
                 GateIn_Time = ''
 
             print(f"GateIn Time: {GateIn_Time}")
 
             try:
-                GateOut_Time = driver.find_element(By.XPATH, '(//td[normalize-space(.)="GateOut Time"]//parent::tr//td)[last()]').text
+                GateOut_Time = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Gate Out Time"]//parent::tr//td)[last()]').text
             except:
                 GateOut_Time = ''
 
@@ -203,35 +198,35 @@ class Helper():
             print(f"Destination: {Destination}")
 
             try:
-                Custom_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Custom Seal No."]//parent::tr//td//span)[1]').text
+                Custom_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Custom Seal No."]//parent::tr//td)[2]').text
             except:
                 Custom_Seal_No = ''
 
             print(f"Custom Seal No.: {Custom_Seal_No}")
 
             try:
-                Line_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Line Seal No."]//parent::tr//td//span)[last()]').text
+                Line_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Line Seal No."]//parent::tr//td)[last()]').text
             except:
                 Line_Seal_No = ''
 
             print(f"Line Seal No.: {Line_Seal_No}")
 
             try:
-                Security_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Security Seal No."]//parent::tr//td//span)[1]').text
+                Security_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Security Seal No."]//parent::tr//td)[2]').text
             except:
                 Security_Seal_No = ''
 
             print(f"Security Seal No.: {Security_Seal_No}")
 
             try:
-                Other_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Other Seal No."]//parent::tr//td//span)[last()]').text
+                Other_Seal_No = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Other Seal No."]//parent::tr//td)[last()]').text
             except:
                 Other_Seal_No = ''
 
             print(f"Other Seal No.: {Other_Seal_No}")
 
             try:
-                Custom_Status = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Custom Status"]//parent::tr//td//span)[1]').text
+                Custom_Status = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Custom Status"]//parent::tr//td)[2]').text
             except:
                 Custom_Status = ''
 
@@ -259,7 +254,7 @@ class Helper():
             print(f"Weight: {Weight}")
 
             try:
-                Weighment = driver.find_element(By.XPATH, '//td[normalize-space(.)="Weighment"]//parent::tr//td//span').text
+                Weighment = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Weighment"]//parent::tr//td)[2]').text
             except:
                 Weighment = ''
 
@@ -273,7 +268,7 @@ class Helper():
             print(f"Scanning: {Scanning}")
 
             try:
-                Present_Holds = driver.find_element(By.XPATH, '//td[normalize-space(.)="Present Holds"]//parent::tr//td//span').text
+                Present_Holds = driver.find_element(By.XPATH, '(//td[normalize-space(.)="Present Holds"]//parent::tr//td)[2]').text
             except:
                 Present_Holds = ''
 
@@ -297,7 +292,7 @@ class Helper():
             df.to_csv(data_stored_file, mode='a', index=False, header=False)
             logging.info(f"Tracking ID {Tracking_ID} saved to CSV.")
          
-        time.sleep(1)
+        time.sleep(0.2)
         logging.info("--------------- Got all Container Details ---------------")
         # Scroll to the top of the page
         driver.execute_script("window.scrollTo(0, 0);")

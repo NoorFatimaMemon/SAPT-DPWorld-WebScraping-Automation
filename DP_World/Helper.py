@@ -28,7 +28,7 @@ class Helper():
                 "//h3[contains(normalize-space(.), 'Container') and contains(normalize-space(.), 'Inquiry')]"
                 "//parent::div//button[normalize-space(text()) = 'Click Here']")
             container_inquiry_button.click()
-            time.sleep(2)
+            time.sleep(1)
 
         except Exception as e:
             logging.error(f"Error interacting with the page: {e}")
@@ -41,13 +41,13 @@ class Helper():
         Tracking_ID_input = driver.find_element(By.XPATH, '//label[@for="txtcontainerNumber"]//parent::div//input[@placeholder="Enter container #"]')
         Tracking_ID_input.click()
         Tracking_ID_input.send_keys(Tracking_ID)
-        time.sleep(2)
+        time.sleep(1)
 
         # To Click on Search Button
         logging.info("--------------- Clicking on Search Button ---------------")
         Search_button = driver.find_element(By.XPATH, '//button[text()="Search" and @id="btnsearchctrinq"]')
         Search_button.click()
-        time.sleep(2)
+        time.sleep(1)
 
         # To Get Container Details
         logging.info("--------------- Getting Container Details ---------------")
@@ -110,7 +110,8 @@ class Helper():
         try:
             Load_Time = driver.find_element(By.XPATH, '(//b[text()="Load Time"]//parent::td//parent::tr//td)[2]').text
         except:
-            Load_Time = ''
+            try: Load_Time = driver.find_element(By.XPATH, '(//b[text()="Out Time"]//parent::td//parent::tr//td)[2]').text
+            except: Load_Time = ''
 
         print(f"Load Time: {Load_Time}")
         
